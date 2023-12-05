@@ -1,5 +1,6 @@
 package com.ll.sbbmission;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,14 +22,26 @@ class SbbMissionApplicationTests
     @Autowired
     private AnswerRepository answerRepository;
 
+    @Transactional
     @Test
     void testJpa()
     {
-        Optional<Answer> oa = this.answerRepository.findById(1);
-        assertTrue(oa.isPresent());
-        Answer a = oa.get();
-        assertEquals(2, a.getQuestion().getId());
+        Optional<Question> oq = this.questionRepository.findById(2);
+        assertTrue(oq.isPresent());
+        Question q = oq.get();
+
+        List<Answer> answerList = q.getAnswerList();
+
+        assertEquals(1, answerList.size());
+        assertEquals("네 자동으로 생성됩니다.", answerList.get(0).getContent());
     }
+
+//    { // answer check
+//        Optional<Answer> oa = this.answerRepository.findById(1);
+//        assertTrue(oa.isPresent());
+//        Answer a = oa.get();
+//        assertEquals(2, a.getQuestion().getId());
+//    }
 //    { // answer data create after save
 //        Optional<Question> oq = this.questionRepository.findById(2);
 //        assertTrue(oq.isPresent());
